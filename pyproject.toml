@@ -1,6 +1,6 @@
 [project]
 name = "investimento-app"
-version = "0.1.0"
+version = "0.2.0"
 description = "Aplicação de apoio aos investimentos"
 authors = [
     {name = "Douglas Panhota",email = "douglaspands@gmail.com"}
