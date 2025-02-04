@@ -24,8 +24,12 @@ def get_stoke(ticker: str):
     for key in ["field", "value"]:
         table.add_column(key.upper())
     for key, value in stoke.__dict__.items():
-        table.add_row(key.upper(), value.isoformat() if isinstance(value, datetime) else str(value))
+        table.add_row(
+            key.upper(),
+            value.isoformat() if isinstance(value, datetime) else str(value),
+        )
     console.print(table)
+
 
 @app.command("list", help="List stocks by tickers.")
 def list_stokes(tickers: list[str]):

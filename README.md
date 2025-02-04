@@ -1,6 +1,10 @@
 # App para controle de investimentos
 Aplicação para controle de investimentos.
 
+## Requisitos
+
+- Python >= 3.12
+
 ## Instalação
 
 1. Clone o repositório: `git clone https://github.com/douglaspands/investimento_app.git`
