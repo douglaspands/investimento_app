@@ -24,15 +24,15 @@ Aplicação para controle de investimentos.
 python main.py stock list ITSA3 BBDC3 VALE3 ABEV3 PETR4 WEGE3 IGTA3 B3SA3
 
 # Output:
- TICKER  NAME                                  PRICE  UPDATED_AT                 
- ITSA3   ITAUSA                                9.50   2025-02-04T02:15:50.935630 
- BBDC3   BRADESCO                              11.01  2025-02-04T02:15:50.897907 
- VALE3   VALE                                  54.21  2025-02-04T02:15:50.918082 
- ABEV3   AMBEV                                 11.03  2025-02-04T02:15:51.064169 
- PETR4   PETROBRAS                             37.50  2025-02-04T02:15:51.378713 
- WEGE3   WEG                                   53.90  2025-02-04T02:15:51.478451 
- IGTA3   IGUATEMI EMPRESA DE SHOPPING CENTERS  33.00  2025-02-04T02:15:51.396419 
- B3SA3   B3                                    11.16  2025-02-04T02:15:51.461526 
+ TICKER  NAME                                  DOCUMENT            PRICE  UPDATED_AT                 
+ ITSA3   ITAUSA                                61.532.644/0001-15  9.50   2025-02-04T02:32:53.190873 
+ BBDC3   BRADESCO                              60.746.948/0001-12  11.01  2025-02-04T02:32:52.985194 
+ VALE3   VALE                                  33.592.510/0001-54  54.21  2025-02-04T02:32:53.246695 
+ ABEV3   AMBEV                                 07.526.557/0001-00  11.03  2025-02-04T02:32:53.124743 
+ PETR4   PETROBRAS                             33.000.167/0001-01  37.50  2025-02-04T02:32:53.228252 
+ WEGE3   WEG                                   84.429.695/0001-11  53.90  2025-02-04T02:32:53.326571 
+ IGTA3   IGUATEMI EMPRESA DE SHOPPING CENTERS  51.218.147/0001-93  33.00  2025-02-04T02:32:53.307780 
+ B3SA3   B3                                    09.346.601/0001-25  11.16  2025-02-04T02:32:52.652061 
 ```
 
 2. Execute a aplicação para listar o preços dos Fiis:

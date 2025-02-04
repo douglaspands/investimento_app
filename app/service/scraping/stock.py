@@ -37,6 +37,11 @@ async def get_stock(ticker: str, client: AsyncClient | None = None) -> Stock:
         ):
             price = Decimal(str(result).strip().replace(",", "."))
             break
+        for result in selector.xpath(
+            "//*[@id='company-section']/div[1]/div/div[1]/div[2]/h4/small/text()"
+        ):
+            document = str(result).strip()
+            break
         description = "\n".join(
             [str(p).strip() for p in selector.xpath("//div/p[not(@*)]/text()")]
         )
@@ -44,6 +49,7 @@ async def get_stock(ticker: str, client: AsyncClient | None = None) -> Stock:
             name=name,
             ticker=ticker.upper(),
             price=price,
+            document=document,
             description=description,
             updated_at=datetime.now(),
         )
