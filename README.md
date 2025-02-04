@@ -17,6 +17,11 @@ Aplicação para controle de investimentos.
 1. Execute a aplicação:
 ```sh
 python main.py stock list BBAS3 VALE3
+
+# Output:
+ TICKER  NAME          PRICE  UPDATED_AT                 
+ BBAS3   BANCO BRASIL  27.61  2025-02-04T01:11:37.913804 
+ VALE3   VALE          54.21  2025-02-04T01:11:38.385332
 ```
 > `python main.py --help` para ver os argumentos disponíveis.
 

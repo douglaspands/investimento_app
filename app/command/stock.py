@@ -19,9 +19,13 @@ def get_stoke(ticker: str):
     Args:
         ticker (str): Ticker symbol of the stock.
     """
-    stoke_data = asyncio.run(stock_scraping.get_stock(ticker=ticker.strip()))
-    console.print(f"Getting stock data for {stoke_data}")
-
+    stoke = asyncio.run(stock_scraping.get_stock(ticker=ticker.strip()))
+    table = Table(box=None)
+    for key in ["field", "value"]:
+        table.add_column(key.upper())
+    for key, value in stoke.__dict__.items():
+        table.add_row(key.upper(), value.isoformat() if isinstance(value, datetime) else str(value))
+    console.print(table)
 
 @app.command("list", help="List stocks by tickers.")
 def list_stokes(tickers: list[str]):
