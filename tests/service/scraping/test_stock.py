@@ -6,14 +6,21 @@ from app.service.scraping import stock as stock_scraping
 
 @pytest.mark.asyncio
 async def test_get_stock_ok_01():
-    ticker = "bbas3"
+    ticker = "PETR3"
     stock = await stock_scraping.get_stock(ticker=ticker)
     assert isinstance(stock, Stock)
 
 
 @pytest.mark.asyncio
 async def test_list_stocks_ok_01():
-    tickers = ["bbas3", "vale3"]
+    tickers = ["B3SA3", "AMER3"]
     stocks = await stock_scraping.list_stocks(tickers=tickers)
+    for stock in stocks:
+        assert isinstance(stock, Stock)
+
+
+@pytest.mark.asyncio
+async def test_list_stocks_most_popular_ok_01():
+    stocks = await stock_scraping.list_stocks_most_popular()
     for stock in stocks:
         assert isinstance(stock, Stock)
