@@ -6,16 +6,22 @@ runner = CliRunner()
 
 
 def test_get_stoke():
-    result = runner.invoke(create_app(), ["stock", "get", "ITSA3"])
+    result = runner.invoke(create_app(), ["stock", "get", "PETR3"])
     assert result.exit_code == 0
-    assert "ITSA3" in result.stdout
-    assert "ITAUSA" in result.stdout
+    assert "PETR3" in result.stdout
 
 
 def test_list_stocks():
-    result = runner.invoke(create_app(), ["stock", "list", "ITSA3", "BBDC3"])
+    result = runner.invoke(create_app(), ["stock", "list", "B3SA3", "AMER3"])
     assert result.exit_code == 0
-    assert "ITSA3" in result.stdout
-    assert "ITAUSA" in result.stdout
-    assert "BBDC3" in result.stdout
-    assert "BRADESCO" in result.stdout
+    assert "B3SA3" in result.stdout
+    assert "B3" in result.stdout
+    assert "AMER3" in result.stdout
+    assert "AMERICANAS" in result.stdout
+
+
+def test_list_stocks_most_popular():
+    result = runner.invoke(create_app(), ["stock", "most_popular"])
+    assert result.exit_code == 0
+    assert "BBAS3" in result.stdout
+    assert "VALE3" in result.stdout

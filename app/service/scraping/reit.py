@@ -75,3 +75,26 @@ async def list_reits(tickers: list[str]) -> list[Reit]:
         return await asyncio.gather(
             *[get_reit(ticker=ticker, client=client) for ticker in tickers]
         )
+
+
+async def list_reits_most_popular() -> list[Reit]:
+    """
+    Get most popular REITs information.
+
+    Returns:
+        list[Reit]: List of Reit datas.
+    """
+    async with AsyncClient() as client:
+        response = await client.get(
+            "https://statusinvest.com.br/fundos-imobiliarios", headers=headers
+        )
+        response.raise_for_status()
+        selector = Selector(text=response.text)
+        tickers = []
+        for result in selector.xpath(
+            '//*[@id="main-2"]/section[2]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
+        ):
+            tickers.append(str(result.css("strong::text").pop()).strip())
+        return await asyncio.gather(
+            *[get_reit(ticker=ticker, client=client) for ticker in tickers]
+        )

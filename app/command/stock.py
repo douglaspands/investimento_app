@@ -53,3 +53,25 @@ def list_stokes(tickers: list[str]):
             ]
         )
     console.print(table)
+
+
+@app.command("most_popular", help="List most popular stocks.")
+def get_stokes_most_popular():
+    """
+    List most popular stocks.
+    """
+    stokes = asyncio.run(stock_scraping.list_stocks_most_popular())
+    table = Table(box=None)
+    for key in ["order"] + list(stokes[0].__dict__.keys()):
+        if key != "description":
+            table.add_column(key.upper())
+    for n, item in enumerate(stokes):
+        table.add_row(
+            f"{n + 1}",
+            *[
+                value.isoformat() if isinstance(value, datetime) else str(value)
+                for key, value in item.__dict__.items()
+                if key != "description"
+            ],
+        )
+    console.print(table)

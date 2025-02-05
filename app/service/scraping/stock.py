@@ -72,3 +72,26 @@ async def list_stocks(tickers: list[str]) -> list[Stock]:
         return await asyncio.gather(
             *[get_stock(ticker=ticker, client=client) for ticker in tickers]
         )
+
+
+async def list_stocks_most_popular() -> list[Stock]:
+    """
+    Get most popular stocks information.
+
+    Returns:
+        list[Stock]: List of Stock datas.
+    """
+    async with AsyncClient() as client:
+        response = await client.get(
+            "https://statusinvest.com.br/acoes", headers=headers
+        )
+        response.raise_for_status()
+        selector = Selector(text=response.text)
+        tickers = []
+        for result in selector.xpath(
+            '//*[@id="main-2"]/section[3]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
+        ):
+            tickers.append(str(result.css("strong::text").pop()).strip())
+        return await asyncio.gather(
+            *[get_stock(ticker=ticker, client=client) for ticker in tickers]
+        )
