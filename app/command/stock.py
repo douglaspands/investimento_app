@@ -40,9 +40,6 @@ def list_stokes(tickers: list[str]):
         tickers (list[str]): List of ticker symbols of the stocks.
     """
     stokes = asyncio.run(stock_scraping.list_stocks(tickers=tickers))
-    if not stokes:
-        console.print("Tickers not found.")
-        return
     table = Table(box=None)
     for key in stokes[0].__dict__.keys():
         if key != "description":

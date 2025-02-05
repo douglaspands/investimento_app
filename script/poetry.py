@@ -6,7 +6,7 @@ def shell(command):
 
 
 def test():
-    shell("pytest --cov=app --cov-report=term-missing")
+    shell("pytest --cov=app --cov-report=term-missing --cov-report=html")
 
 
 def format():
