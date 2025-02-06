@@ -24,3 +24,10 @@ async def test_list_reits_most_popular_ok_01():
     reits = await reit_scraping.list_reits_most_popular()
     for reit in reits:
         assert isinstance(reit, Reit)
+
+
+@pytest.mark.asyncio
+async def test_list_reits_most_popular_tickets_ok_01():
+    tickers = await reit_scraping.list_tickers_most_popular()
+    for ticker in tickers:
+        assert isinstance(ticker, str)

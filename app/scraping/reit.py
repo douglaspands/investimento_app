@@ -73,6 +73,36 @@ async def get_reit(ticker: str, client: AsyncClient | None = None) -> Reit:
             await _client.aclose()
 
 
+@retry(
+    wait=wait_fixed(5),
+    stop=stop_after_attempt(3),
+    retry=retry_if_exception_type((RequestError, HTTPStatusError)),
+)
+async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[str]:
+    """List the most popular tickers (about REITs).
+
+    Args:
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
+
+    Returns:
+        list[str]: List of most popular tickers.
+    """
+    _client = client if client else AsyncClient()
+    try:
+        response = await _client.get(scraping_url, headers=headers)
+        response.raise_for_status()
+        selector = Selector(text=response.text)
+        tickers = []
+        for result in selector.xpath(
+            '//*[@id="main-2"]/section[2]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
+        ):
+            tickers.append(str(result.css("strong::text").pop()).strip())
+        return tickers
+    finally:
+        if not client:
+            await _client.aclose()
+
+
 async def list_reits(tickers: list[str]) -> list[Reit]:
     """
     List REITs information.
