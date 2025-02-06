@@ -1,7 +1,7 @@
 import pytest
 
 from app.resource.stock import Stock
-from app.service.scraping import stock as stock_scraping
+from app.scraping import stock as stock_scraping
 
 
 @pytest.mark.asyncio

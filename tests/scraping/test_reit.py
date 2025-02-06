@@ -1,7 +1,7 @@
 import pytest
 
 from app.resource.reit import Reit
-from app.service.scraping import reit as reit_scraping
+from app.scraping import reit as reit_scraping
 
 
 @pytest.mark.asyncio

@@ -5,9 +5,9 @@ from rich.console import Console
 from rich.table import Table
 from typer import Typer
 
-from app.service.scraping import stock as stock_scraping
+from app.scraping import stock as stock_scraping
 
-app = Typer(name="stock", help="Stock utils")
+app = Typer(name="stock", help="Stock utils.")
 console = Console()
 
 
