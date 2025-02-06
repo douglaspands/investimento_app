@@ -5,7 +5,7 @@ from rich.console import Console
 from rich.table import Table
 from typer import Typer
 
-from app.scraping import reit as reit_scraping
+from app.service import reit as reit_service
 
 app = Typer(name="reit", help="REITs utils.")
 console = Console()
@@ -19,7 +19,7 @@ def get_reit(ticker: str):
     Args:
         ticker (str): Ticker symbol of the REIT.
     """
-    stoke = asyncio.run(reit_scraping.get_reit(ticker=ticker.strip()))
+    stoke = asyncio.run(reit_service.get_reit(ticker=ticker.strip()))
     table = Table(box=None)
     for key in ["field", "value"]:
         table.add_column(key.upper())
@@ -39,7 +39,7 @@ def list_stokes(tickers: list[str]):
     Args:
         tickers (list[str]): List of ticker symbols of the REITs.
     """
-    stokes = asyncio.run(reit_scraping.list_reits(tickers=tickers))
+    stokes = asyncio.run(reit_service.list_reits(tickers=tickers))
     table = Table(box=None)
     for key in stokes[0].__dict__.keys():
         if key != "description":
@@ -60,7 +60,7 @@ def get_stokes_most_popular():
     """
     List most popular REITs.
     """
-    stokes = asyncio.run(reit_scraping.list_reits_most_popular())
+    stokes = asyncio.run(reit_service.list_reits_most_popular())
     table = Table(box=None)
     for key in ["order"] + list(stokes[0].__dict__.keys()):
         if key != "description":

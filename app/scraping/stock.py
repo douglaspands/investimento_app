@@ -77,7 +77,7 @@ async def get_stock(ticker: str, client: AsyncClient | None = None) -> Stock:
     retry=retry_if_exception_type((RequestError, HTTPStatusError)),
 )
 async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[str]:
-    """List the most popular tickers (About stocks).
+    """List the most popular tickers (About stocks) from StatusInvest.
 
     Args:
         client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
@@ -101,31 +101,43 @@ async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[s
             await _client.aclose()
 
 
-async def list_stocks(tickers: list[str]) -> list[Stock]:
+async def list_stocks(
+    tickers: list[str], client: AsyncClient | None = None
+) -> list[Stock]:
     """
-    List stocks information.
+    List stocks information from StatusInvest.
 
     Args:
         tickers (list[str]): List of stock tickers.
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
 
     Returns:
         list[Stock]: List of Stock datas.
     """
-    async with AsyncClient() as client:
+    _client = client if client else AsyncClient()
+    try:
         return await asyncio.gather(
-            *[get_stock(ticker=ticker, client=client) for ticker in tickers]
+            *[get_stock(ticker=ticker, client=_client) for ticker in tickers]
         )
+    finally:
+        if not client:
+            await _client.aclose()
 
 
-async def list_stocks_most_popular() -> list[Stock]:
+async def list_stocks_most_popular(client: AsyncClient | None = None) -> list[Stock]:
     """
-    Get most popular stocks information.
+    Get most popular stocks information from StatusInvest.
+
+    Args:
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
 
     Returns:
         list[Stock]: List of Stock datas.
     """
-    async with AsyncClient() as client:
-        tickers = await list_tickers_most_popular(client=client)
-        return await asyncio.gather(
-            *[get_stock(ticker=ticker, client=client) for ticker in tickers]
-        )
+    _client = client if client else AsyncClient()
+    try:
+        tickers = await list_tickers_most_popular(client=_client)
+        return await list_stocks(tickers=tickers, client=_client)
+    finally:
+        if not client:
+            await _client.aclose()

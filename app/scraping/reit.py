@@ -29,6 +29,7 @@ async def get_reit(ticker: str, client: AsyncClient | None = None) -> Reit:
 
     Args:
         ticker (str): Reit ticker.
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
 
     Returns:
         Reit: REIT information.
@@ -79,7 +80,7 @@ async def get_reit(ticker: str, client: AsyncClient | None = None) -> Reit:
     retry=retry_if_exception_type((RequestError, HTTPStatusError)),
 )
 async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[str]:
-    """List the most popular tickers (about REITs).
+    """List the most popular tickers (about REITs) from StatusInvest.
 
     Args:
         client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
@@ -103,38 +104,43 @@ async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[s
             await _client.aclose()
 
 
-async def list_reits(tickers: list[str]) -> list[Reit]:
+async def list_reits(
+    tickers: list[str], client: AsyncClient | None = None
+) -> list[Reit]:
     """
-    List REITs information.
+    List REITs information from StatusInvest.
 
     Args:
         tickers (list[str]): List of Reit tickers.
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
 
     Returns:
         list[Stock]: List of REIT datas.
     """
-    async with AsyncClient() as client:
+    _client = client if client else AsyncClient()
+    try:
         return await asyncio.gather(
-            *[get_reit(ticker=ticker, client=client) for ticker in tickers]
+            *[get_reit(ticker=ticker, client=_client) for ticker in tickers]
         )
+    finally:
+        if not client:
+            await _client.aclose()
 
 
-async def list_reits_most_popular() -> list[Reit]:
+async def list_reits_most_popular(client: AsyncClient | None = None) -> list[Reit]:
     """
-    Get most popular REITs information.
+    Get most popular REITs information from StatusInvest.
+
+    Args:
+        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
 
     Returns:
         list[Reit]: List of Reit datas.
     """
-    async with AsyncClient() as client:
-        response = await client.get(scraping_url, headers=headers)
-        response.raise_for_status()
-        selector = Selector(text=response.text)
-        tickers = []
-        for result in selector.xpath(
-            '//*[@id="main-2"]/section[2]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
-        ):
-            tickers.append(str(result.css("strong::text").pop()).strip())
-        return await asyncio.gather(
-            *[get_reit(ticker=ticker, client=client) for ticker in tickers]
-        )
+    _client = client if client else AsyncClient()
+    try:
+        tickers = await list_tickers_most_popular(client=_client)
+        return await list_reits(tickers=tickers, client=_client)
+    finally:
+        if not client:
+            await _client.aclose()
