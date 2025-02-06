@@ -9,10 +9,10 @@ Aplicação para controle de investimentos.
 
 1. Clone o repositório: `git clone https://github.com/douglaspands/investimento_app.git`
 2. Acesse a pasta do projeto: `cd investimento_app`
-3. Crie um ambiente virtual (opcional): `python -m venv venv`
+3. Crie um ambiente virtual (opcional): `python -m venv .venv`
 4. Ative o ambiente virtual:
-   - No Windows: `venv\Scripts\activate`
-   - No macOS/Linux: `source venv/bin/activate`
+   - No Windows: `.venv\Scripts\activate`
+   - No macOS/Linux: `source .venv/bin/activate`
 5. Instale o Poetry: `pip install poetry`
 6. Instale as dependências: `poetry install`
 
@@ -115,8 +115,6 @@ python main.py reit most_popular
  5      HGLG11  CGHG Logística                          PLURAL S.A. BANCO MÚLTIPLO              Logística                      149.79  2025-02-05T00:20:52.971735 
  6      VGHF11  VALORA HEDGE FUND                       BANCO DAYCOVAL S.A.                     Títulos e Valores Mobiliários  6.81    2025-02-05T00:20:52.911971
 ```
-
-
 
 > `python main.py --help` para ver os argumentos disponíveis.
 
