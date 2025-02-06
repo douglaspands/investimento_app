@@ -1,7 +1,7 @@
 import subprocess
 
 
-def shell(command):
+def shell(command: str):
     return subprocess.run(command, check=True, shell=True)
 
 
@@ -10,7 +10,8 @@ def test():
 
 
 def format():
-    shell("ruff format .")
+    shell("ruff check --select I --fix")
+    shell("ruff format")
 
 
 def check():
