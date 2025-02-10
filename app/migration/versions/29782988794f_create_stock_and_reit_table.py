@@ -1,8 +1,8 @@
 """create stock and reit table
 
-Revision ID: a758f06f71a5
+Revision ID: 29782988794f
 Revises:
-Create Date: 2025-02-10 01:47:28.638521
+Create Date: 2025-02-10 02:01:23.644733
 
 """
 
@@ -13,7 +13,7 @@ import sqlmodel
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "a758f06f71a5"
+revision: str = "29782988794f"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
