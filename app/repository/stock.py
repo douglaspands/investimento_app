@@ -1,6 +1,8 @@
+from datetime import datetime
 from typing import Any, Sequence
 
-from sqlmodel import select
+from sqlalchemy.exc import NoResultFound
+from sqlmodel import or_, select
 
 from app.common import utils
 from app.common.database import AsyncSession
@@ -15,15 +17,27 @@ async def get_all(
     return result.all()
 
 
-async def get_by_ticker(session: AsyncSession, ticker: str) -> StockModel:
-    statement = select(StockModel).where(StockModel.ticker == ticker)
-    result = await session.exec(statement)
-    return result.one()
-
-
 async def create(session: AsyncSession, stock: StockModel) -> StockModel:
     session.add(stock)
     return stock
+
+
+async def get_by_ticker(session: AsyncSession, ticker: str) -> StockModel | None:
+    statement = select(StockModel).where(StockModel.ticker == ticker)
+    result = await session.exec(statement)
+    return result.one_or_none()
+
+
+async def get_all_by_tickers(
+    session: AsyncSession, tickers: list[str], updated_at: datetime
+) -> Sequence[StockModel]:
+    statement = (
+        select(StockModel)
+        .where(or_(*[StockModel.ticker == ticker for ticker in tickers]))
+        .where(StockModel.updated_at >= updated_at)
+    )
+    result = await session.exec(statement)
+    return result.all()
 
 
 async def update_by_ticker(
@@ -31,17 +45,8 @@ async def update_by_ticker(
 ) -> StockModel:
     utils.repository_columns_can_update(values)
     stock = await get_by_ticker(session=session, ticker=ticker)
+    if not stock:
+        raise NoResultFound("No row was found when one was required")
     stock.sqlmodel_update(values)
     session.add(stock)
     return stock
-
-
-async def get_or_create(session: AsyncSession, stock: StockModel) -> StockModel:
-    stock_ = await get_all(
-        session=session,
-        limit=1,
-        ticker=stock.ticker,
-    )
-    if stock_:
-        return stock_[0]
-    return await create(session=session, stock=stock)

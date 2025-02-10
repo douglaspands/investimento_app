@@ -1,5 +1,13 @@
+from datetime import datetime, timedelta
+
+from app.common.database import db_session_maker
+from app.common.http import get_httpclient
+from app.model.stock import Stock as StockModel
+from app.repository import stock as stock_repository
 from app.resource.stock import Stock
 from app.scraping import stock as stock_scraping
+
+SessionLocal = db_session_maker()
 
 
 async def get_stock(ticker: str) -> Stock:
@@ -11,7 +19,34 @@ async def get_stock(ticker: str) -> Stock:
     Returns:
         Stock: Stock information.
     """
-    return await stock_scraping.get_stock(ticker=ticker)
+    async with SessionLocal() as db_session:
+        async with get_httpclient() as http_client:
+            stock = await stock_repository.get_by_ticker(
+                session=db_session, ticker=ticker
+            )
+            if stock:
+                if stock.updated_at and stock.updated_at < (
+                    datetime.now() - timedelta(minutes=10)
+                ):
+                    stoke_now = await stock_scraping.get_stock(
+                        ticker=ticker, client=http_client
+                    )
+                    stock.price = stoke_now.price
+                    stock.updated_at = stoke_now.updated_at
+                    await stock_repository.update_by_ticker(
+                        session=db_session,
+                        ticker=ticker,
+                        price=stoke_now.price,
+                        updated_at=stoke_now.updated_at,
+                    )
+            else:
+                stoke_now = await stock_scraping.get_stock(
+                    ticker=ticker, client=http_client
+                )
+                stock = await stock_repository.create(
+                    session=db_session, stock=StockModel(**stoke_now.__dict__)
+                )
+    return Stock(**stock.__dict__)
 
 
 async def list_stocks(tickers: list[str]) -> list[Stock]:
@@ -24,7 +59,8 @@ async def list_stocks(tickers: list[str]) -> list[Stock]:
     Returns:
         list[Stock]: List of Stock datas.
     """
-    return await stock_scraping.list_stocks(tickers=tickers)
+    async with get_httpclient() as http_client:
+        return await stock_scraping.list_stocks(client=http_client, tickers=tickers)
 
 
 async def list_stocks_most_popular() -> list[Stock]:
@@ -34,4 +70,5 @@ async def list_stocks_most_popular() -> list[Stock]:
     Returns:
         list[Stock]: List of Stock datas.
     """
-    return await stock_scraping.list_stocks_most_popular()
+    async with get_httpclient() as http_client:
+        return await stock_scraping.list_stocks_most_popular(client=http_client)
