@@ -1,8 +1,8 @@
 """create stock and reit table
 
-Revision ID: 70b03b950bec
+Revision ID: a758f06f71a5
 Revises:
-Create Date: 2025-02-09 22:49:11.172539
+Create Date: 2025-02-10 01:47:28.638521
 
 """
 
@@ -13,7 +13,7 @@ import sqlmodel
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "70b03b950bec"
+revision: str = "a758f06f71a5"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,7 +33,7 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_reit_ticker"), "reit", ["ticker"], unique=False)
+    op.create_index(op.f("ix_reit_ticker"), "reit", ["ticker"], unique=True)
     op.create_table(
         "stock",
         sa.Column("id", sa.Integer(), nullable=False),

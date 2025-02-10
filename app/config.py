@@ -12,6 +12,9 @@ class Config(BaseSettings):
     db_url: str = "sqlite+aiosqlite:///db.sqlite3"
     db_debug: bool = False
 
+    stock_cache_ttl: int = 600
+    reit_cache_ttl: int = 600
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

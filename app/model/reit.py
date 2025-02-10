@@ -7,7 +7,7 @@ from sqlmodel import Column, DateTime, Field, SQLModel
 
 class Reit(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    ticker: str = Field(index=True)
+    ticker: str = Field(index=True, unique=True)
     name: str
     admin: str
     segment: str

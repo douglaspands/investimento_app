@@ -101,17 +101,3 @@ async def list_stocks(client: AsyncClient, tickers: list[str]) -> list[Stock]:
     return await asyncio.gather(
         *[get_stock(ticker=ticker, client=client) for ticker in tickers]
     )
-
-
-async def list_stocks_most_popular(client: AsyncClient) -> list[Stock]:
-    """
-    Get most popular stocks information from StatusInvest.
-
-    Args:
-        client (AsyncClient): Async HTTPX client.
-
-    Returns:
-        list[Stock]: List of Stock datas.
-    """
-    tickers = await list_tickers_most_popular(client=client)
-    return await list_stocks(tickers=tickers, client=client)
