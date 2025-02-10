@@ -9,6 +9,9 @@ class Config(BaseSettings):
     description: str
     version: str
 
+    db_url: str = "sqlite+aiosqlite:///db.sqlite3"
+    db_debug: bool = False
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -3,14 +3,17 @@ from typer import Typer
 from app.command.base import init_app as command_init_app
 from app.command.reit import app as reit_app
 from app.command.stock import app as stock_app
+from app.common.migration import migration_apply
 from app.config import get_config
 
 
 def create_app():
+    migration_apply()
     config = get_config()
     app = Typer(
         name="investiments",
         help=f"{config.description}. < v{config.version} >",
+        add_completion=False,
     )
     command_init_app(app)
     app.add_typer(stock_app)
