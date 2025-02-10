@@ -1,8 +1,8 @@
 """create stock and reit table
 
-Revision ID: 29782988794f
+Revision ID: 81e6e974aa9c
 Revises:
-Create Date: 2025-02-10 02:01:23.644733
+Create Date: 2025-02-10 02:06:01.793621
 
 """
 
@@ -12,8 +12,9 @@ import sqlalchemy as sa
 import sqlmodel
 from alembic import op
 
+
 # revision identifiers, used by Alembic.
-revision: str = "29782988794f"
+revision: str = "81e6e974aa9c"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

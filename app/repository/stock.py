@@ -9,14 +9,6 @@ from app.common.database import AsyncSession
 from app.model.stock import Stock as StockModel
 
 
-async def get_all(
-    session: AsyncSession, limit: int = 250, **values: Any
-) -> Sequence[StockModel]:
-    statement = select(StockModel).filter_by(**values).limit(limit)
-    result = await session.exec(statement)
-    return result.all()
-
-
 async def create(session: AsyncSession, stock: StockModel) -> StockModel:
     session.add(stock)
     return stock

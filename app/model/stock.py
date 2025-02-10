@@ -12,14 +12,14 @@ class Stock(SQLModel, table=True):
     description: str
     document: str
     price: Decimal
-    created_at: datetime | None = Field(
+    created_at: datetime = Field(
         sa_column=Column(
             DateTime,
             default=lambda: datetime.now(),
             nullable=False,
         )
     )
-    updated_at: datetime | None = Field(
+    updated_at: datetime = Field(
         sa_column=Column(
             DateTime,
             default=lambda: datetime.now(),
