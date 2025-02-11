@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime
+from decimal import Decimal
 
 from rich.console import Console
 from rich.table import Table
@@ -7,7 +8,7 @@ from typer import Typer
 
 from app.service import reit as reit_service
 
-app = Typer(name="reit", help="REITs utils.")
+app = Typer(name="reit", help="REITs tools.")
 console = Console()
 
 
@@ -26,7 +27,9 @@ def get_reit(ticker: str):
     for key, value in stoke.__dict__.items():
         table.add_row(
             key.upper(),
-            value.isoformat() if isinstance(value, datetime) else str(value),
+            value.isoformat()
+            if isinstance(value, datetime)
+            else (f"{value:.2f}" if isinstance(value, Decimal) else str(value)),
         )
     console.print(table)
 
@@ -47,7 +50,9 @@ def list_stokes(tickers: list[str]):
     for item in stokes:
         table.add_row(
             *[
-                value.isoformat() if isinstance(value, datetime) else str(value)
+                value.isoformat()
+                if isinstance(value, datetime)
+                else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
                 if key != "description"
             ]
@@ -69,7 +74,9 @@ def get_stokes_most_popular():
         table.add_row(
             f"{n + 1}",
             *[
-                value.isoformat() if isinstance(value, datetime) else str(value)
+                value.isoformat()
+                if isinstance(value, datetime)
+                else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
                 if key != "description"
             ],
