@@ -17,8 +17,8 @@ class Config(BaseSettings):
     alembic_ini: Path
     alembic_migration_folder: Path
 
-    stock_cache_ttl: int = 600
-    reit_cache_ttl: int = 600
+    stock_cache_ttl: int = 10 * 60
+    reit_cache_ttl: int = 10 * 60
 
     root_path: Path
     config_path: Path

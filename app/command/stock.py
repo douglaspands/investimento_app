@@ -45,7 +45,11 @@ def list_stokes(tickers: list[str]):
     stokes = asyncio.run(stock_service.list_stocks(tickers=tickers))
     table = Table(box=None)
     for key in stokes[0].__dict__.keys():
-        if key != "description":
+        if key == "description":
+            continue
+        if key in ("price",):
+            table.add_column(key.upper(), justify="right")
+        else:
             table.add_column(key.upper())
     for item in stokes:
         table.add_row(
@@ -68,7 +72,11 @@ def get_stokes_most_popular():
     stokes = asyncio.run(stock_service.list_stocks_most_popular())
     table = Table(box=None)
     for key in ["order"] + list(stokes[0].__dict__.keys()):
-        if key != "description":
+        if key == "description":
+            continue
+        if key in ("price",):
+            table.add_column(key.upper(), justify="right")
+        else:
             table.add_column(key.upper())
     for n, item in enumerate(stokes):
         table.add_row(
