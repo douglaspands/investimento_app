@@ -74,7 +74,7 @@ def get_stokes_most_popular():
     for key in ["order"] + list(stokes[0].__dict__.keys()):
         if key == "description":
             continue
-        if key in ("price",):
+        if key in ("order", "price"):
             table.add_column(key.upper(), justify="right")
         else:
             table.add_column(key.upper())
