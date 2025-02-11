@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from httpx import AsyncClient, HTTPStatusError, RequestError
@@ -58,7 +58,7 @@ async def get_stock(client: AsyncClient, ticker: str) -> Stock:
         price=price,
         document=document,
         description=description,
-        updated_at=datetime.now(),
+        updated_at=datetime.now(tz=timezone.utc),
     )
 
 

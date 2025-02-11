@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from httpx import AsyncClient, HTTPStatusError, RequestError
@@ -63,7 +63,7 @@ async def get_reit(ticker: str, client: AsyncClient) -> Reit:
         price=price,
         segment=segment,
         admin=admin,
-        updated_at=datetime.now(),
+        updated_at=datetime.now(tz=timezone.utc),
     )
 
 

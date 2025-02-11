@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Optional
 
@@ -15,15 +15,15 @@ class Reit(SQLModel, table=True):
     created_at: datetime = Field(
         sa_column=Column(
             DateTime,
-            default=lambda: datetime.now(),
+            default=lambda: datetime.now(tz=timezone.utc),
             nullable=False,
         )
     )
     updated_at: datetime = Field(
         sa_column=Column(
             DateTime,
-            default=lambda: datetime.now(),
-            onupdate=lambda: datetime.now(),
+            default=lambda: datetime.now(tz=timezone.utc),
+            onupdate=lambda: datetime.now(tz=timezone.utc),
             nullable=False,
         )
     )
