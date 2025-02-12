@@ -23,6 +23,8 @@ class Config(BaseSettings):
     root_path: Path
     config_path: Path
 
+    scraping_timeout_ttl: float = (1 * 60) + 0.001
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

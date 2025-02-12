@@ -9,7 +9,9 @@ def shell(command: str | list[str]):
 
 
 def test():
-    shell("pytest --cov=app --cov-report=term-missing --cov-report=html")
+    shell(
+        "pytest --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html"
+    )
 
 
 def format():

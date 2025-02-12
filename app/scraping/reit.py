@@ -6,6 +6,7 @@ from httpx import AsyncClient, HTTPStatusError, RequestError
 from parsel import Selector
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
+from app.config import get_config
 from app.resource.reit import Reit
 
 headers = {
@@ -34,10 +35,12 @@ async def get_reit(ticker: str, client: AsyncClient) -> Reit:
     Returns:
         Reit: REIT information.
     """
+    config = get_config()
     ticker = ticker.strip()
     response = await client.get(
         f"{scraping_url}/{ticker.lower()}",
         headers=headers,
+        timeout=config.scraping_timeout_ttl,
     )
     response.raise_for_status()
     selector = Selector(text=response.text)
@@ -81,7 +84,12 @@ async def list_tickers_most_popular(client: AsyncClient) -> list[str]:
     Returns:
         list[str]: List of most popular tickers.
     """
-    response = await client.get(scraping_url, headers=headers)
+    config = get_config()
+    response = await client.get(
+        scraping_url,
+        headers=headers,
+        timeout=config.scraping_timeout_ttl,
+    )
     response.raise_for_status()
     selector = Selector(text=response.text)
     tickers = []
