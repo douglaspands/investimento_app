@@ -2,11 +2,13 @@ import asyncio
 from datetime import datetime
 from decimal import Decimal
 from typing import Annotated
+from zoneinfo import ZoneInfo
 
 from rich.console import Console
 from rich.table import Table
 from typer import Option, Typer
 
+from app.config import get_config
 from app.enum.scraping import ScrapingOriginEnum
 from app.service import stock as stock_service
 
@@ -34,7 +36,7 @@ def get_stoke(
     for key, value in stoke.__dict__.items():
         table.add_row(
             key.upper(),
-            value.isoformat()
+            value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
             if isinstance(value, datetime)
             else (f"{value:.2f}" if isinstance(value, Decimal) else str(value)),
         )
@@ -67,7 +69,7 @@ def list_stokes(
     for item in stokes:
         table.add_row(
             *[
-                value.isoformat()
+                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
@@ -101,7 +103,7 @@ def get_stokes_most_popular(
         table.add_row(
             f"{n + 1}",
             *[
-                value.isoformat()
+                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()

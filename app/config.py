@@ -25,6 +25,8 @@ class Config(BaseSettings):
 
     scraping_timeout_ttl: float = (1 * 60) + 0.001
 
+    timezone_local: str = "America/Sao_Paulo"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

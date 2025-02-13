@@ -1,5 +1,4 @@
 import asyncio
-from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Self
 
@@ -8,6 +7,7 @@ from parsel import Selector
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
 from app.common.http import get_headers
+from app.common.utils import now_utc
 from app.config import get_config
 from app.resource.reit import Reit
 from app.scraping.interface import ScrapingInterface
@@ -77,7 +77,7 @@ class StatusInvestReitScraping(ScrapingInterface[Reit]):
             segment=segment,
             admin=admin,
             origin="StatusInvest",
-            updated_at=datetime.now(tz=timezone.utc),
+            updated_at=now_utc(),
         )
 
     @retry(
