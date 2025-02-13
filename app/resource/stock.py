@@ -11,3 +11,4 @@ class Stock(BaseModel):
     price: Decimal
     updated_at: datetime
     description: str
+    origin: str

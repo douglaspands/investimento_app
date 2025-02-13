@@ -12,6 +12,7 @@ class Reit(SQLModel, table=True):
     admin: str
     segment: str
     price: Decimal
+    origin: str
     created_at: datetime = Field(
         sa_column=Column(
             DateTime,

@@ -2,7 +2,7 @@ import pytest
 
 from app.common.http import get_httpclient
 from app.resource.stock import Stock
-from app.scraping import stock as stock_scraping
+from app.scraping.status_invest import stock as stock_scraping
 
 
 @pytest.mark.asyncio

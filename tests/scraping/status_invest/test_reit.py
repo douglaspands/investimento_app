@@ -2,7 +2,7 @@ import pytest
 
 from app.common.http import get_httpclient
 from app.resource.reit import Reit
-from app.scraping import reit as reit_scraping
+from app.scraping.status_invest import reit as reit_scraping
 
 
 @pytest.mark.asyncio

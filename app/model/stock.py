@@ -12,6 +12,7 @@ class Stock(SQLModel, table=True):
     description: str
     document: str
     price: Decimal
+    origin: str
     created_at: datetime = Field(
         sa_column=Column(
             DateTime,
