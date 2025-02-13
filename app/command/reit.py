@@ -74,7 +74,7 @@ def list_stokes(
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
-                if key != "description"
+                if key not in ("description", "origin")
             ]
         )
     console.print(table)
@@ -110,7 +110,7 @@ def get_stokes_most_popular(
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
-                if key != "description"
+                if key not in ("description", "origin")
             ],
         )
     console.print(table)
