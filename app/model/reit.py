@@ -2,8 +2,9 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Column, DateTime, Field, SQLModel
+from sqlmodel import Column, Field, SQLModel
 
+from app.common.model import DateTimeWithTimeZone
 from app.common.utils import now_utc
 
 
@@ -17,14 +18,14 @@ class Reit(SQLModel, table=True):
     origin: str
     created_at: datetime = Field(
         sa_column=Column(
-            DateTime(timezone=True),
+            DateTimeWithTimeZone,
             default=lambda: now_utc(),
             nullable=False,
         )
     )
     updated_at: datetime = Field(
         sa_column=Column(
-            DateTime(timezone=True),
+            DateTimeWithTimeZone,
             default=lambda: now_utc(),
             onupdate=lambda: now_utc(),
             nullable=False,
