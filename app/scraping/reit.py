@@ -1,11 +1,12 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from httpx import AsyncClient, HTTPStatusError, RequestError
 from parsel import Selector
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
+from app.config import get_config
 from app.resource.reit import Reit
 
 headers = {
@@ -24,54 +25,49 @@ scraping_url = "https://statusinvest.com.br/fundos-imobiliarios"
     stop=stop_after_attempt(3),
     retry=retry_if_exception_type((RequestError, HTTPStatusError)),
 )
-async def get_reit(ticker: str, client: AsyncClient | None = None) -> Reit:
+async def get_reit(ticker: str, client: AsyncClient) -> Reit:
     """Get REIT information from StatusInvest.
 
     Args:
         ticker (str): Reit ticker.
-        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
+        client (AsyncClient): Async HTTPX client.
 
     Returns:
         Reit: REIT information.
     """
+    config = get_config()
     ticker = ticker.strip()
-    _client = client if client else AsyncClient()
-    try:
-        response = await _client.get(
-            f"{scraping_url}/{ticker.lower()}",
-            headers=headers,
-        )
-        response.raise_for_status()
-        selector = Selector(text=response.text)
-        for result in selector.xpath("//h1[@class='lh-4']/small/text()"):
-            name = str(result).strip()
-            break
-        for result in selector.xpath(
-            "//*[@id='fund-section']/div/div/div[2]/div/div[6]/div/div/strong/text()"
-        ):
-            segment = str(result).strip()
-            break
-        for result in selector.xpath(
-            '//div[@title="Valor atual do ativo"]/strong/text()'
-        ):
-            price = Decimal(str(result).strip().replace(",", "."))
-            break
-        for result in selector.xpath(
-            "//*[@id='fund-section']/div/div/div[3]/div/div[2]/div[1]/div/strong/text()"
-        ):
-            admin = str(result).strip()
-            break
-        return Reit(
-            name=name,
-            ticker=ticker.upper(),
-            price=price,
-            segment=segment,
-            admin=admin,
-            updated_at=datetime.now(),
-        )
-    finally:
-        if not client:
-            await _client.aclose()
+    response = await client.get(
+        f"{scraping_url}/{ticker.lower()}",
+        headers=headers,
+        timeout=config.scraping_timeout_ttl,
+    )
+    response.raise_for_status()
+    selector = Selector(text=response.text)
+    for result in selector.xpath("//h1[@class='lh-4']/small/text()"):
+        name = str(result).strip()
+        break
+    for result in selector.xpath(
+        "//*[@id='fund-section']/div/div/div[2]/div/div[6]/div/div/strong/text()"
+    ):
+        segment = str(result).strip()
+        break
+    for result in selector.xpath('//div[@title="Valor atual do ativo"]/strong/text()'):
+        price = Decimal(str(result).strip().replace(",", "."))
+        break
+    for result in selector.xpath(
+        "//*[@id='fund-section']/div/div/div[3]/div/div[2]/div[1]/div/strong/text()"
+    ):
+        admin = str(result).strip()
+        break
+    return Reit(
+        name=name,
+        ticker=ticker.upper(),
+        price=price,
+        segment=segment,
+        admin=admin,
+        updated_at=datetime.now(tz=timezone.utc),
+    )
 
 
 @retry(
@@ -79,68 +75,42 @@ async def get_reit(ticker: str, client: AsyncClient | None = None) -> Reit:
     stop=stop_after_attempt(3),
     retry=retry_if_exception_type((RequestError, HTTPStatusError)),
 )
-async def list_tickers_most_popular(client: AsyncClient | None = None) -> list[str]:
+async def list_tickers_most_popular(client: AsyncClient) -> list[str]:
     """List the most popular tickers (about REITs) from StatusInvest.
 
     Args:
-        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
+        client (AsyncClient): Async HTTPX client.
 
     Returns:
         list[str]: List of most popular tickers.
     """
-    _client = client if client else AsyncClient()
-    try:
-        response = await _client.get(scraping_url, headers=headers)
-        response.raise_for_status()
-        selector = Selector(text=response.text)
-        tickers = []
-        for result in selector.xpath(
-            '//*[@id="main-2"]/section[2]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
-        ):
-            tickers.append(str(result.css("strong::text").pop()).strip())
-        return tickers
-    finally:
-        if not client:
-            await _client.aclose()
+    config = get_config()
+    response = await client.get(
+        scraping_url,
+        headers=headers,
+        timeout=config.scraping_timeout_ttl,
+    )
+    response.raise_for_status()
+    selector = Selector(text=response.text)
+    tickers = []
+    for result in selector.xpath(
+        '//*[@id="main-2"]/section[2]/div/div[1]/div[2]/table/tr/td/a/div[2]/h4'
+    ):
+        tickers.append(str(result.css("strong::text").pop()).strip())
+    return tickers
 
 
-async def list_reits(
-    tickers: list[str], client: AsyncClient | None = None
-) -> list[Reit]:
+async def list_reits(tickers: list[str], client: AsyncClient) -> list[Reit]:
     """
     List REITs information from StatusInvest.
 
     Args:
         tickers (list[str]): List of Reit tickers.
-        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
+        client (AsyncClient): Async HTTPX client.
 
     Returns:
         list[Stock]: List of REIT datas.
     """
-    _client = client if client else AsyncClient()
-    try:
-        return await asyncio.gather(
-            *[get_reit(ticker=ticker, client=_client) for ticker in tickers]
-        )
-    finally:
-        if not client:
-            await _client.aclose()
-
-
-async def list_reits_most_popular(client: AsyncClient | None = None) -> list[Reit]:
-    """
-    Get most popular REITs information from StatusInvest.
-
-    Args:
-        client (AsyncClient | None, optional): Async HTTPX client. Defaults to None.
-
-    Returns:
-        list[Reit]: List of Reit datas.
-    """
-    _client = client if client else AsyncClient()
-    try:
-        tickers = await list_tickers_most_popular(client=_client)
-        return await list_reits(tickers=tickers, client=_client)
-    finally:
-        if not client:
-            await _client.aclose()
+    return await asyncio.gather(
+        *[get_reit(ticker=ticker, client=client) for ticker in tickers]
+    )
