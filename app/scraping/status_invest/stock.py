@@ -7,6 +7,7 @@ from httpx import AsyncClient, HTTPStatusError, RequestError
 from parsel import Selector
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
+from app.common.http import get_headers
 from app.config import get_config
 from app.resource.stock import Stock
 from app.scraping.interface import ScrapingInterface
@@ -23,14 +24,6 @@ class StatusInvestStockScraping(ScrapingInterface[Stock]):
         """
         self._client = client
         self._url = "https://statusinvest.com.br"
-        self._headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-            "Connection": "keep-alive",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-            "Accept-Encoding": "gzip, deflate",
-            "Cache-Control": "no-cache",
-        }
 
     @retry(
         wait=wait_fixed(5),
@@ -51,7 +44,7 @@ class StatusInvestStockScraping(ScrapingInterface[Stock]):
         ticker = ticker.strip()
         response = await self._client.get(
             f"{self._url}/acoes/{ticker.lower()}",
-            headers=self._headers,
+            headers=get_headers(),
             timeout=config.scraping_timeout_ttl,
         )
         response.raise_for_status()
@@ -114,7 +107,7 @@ class StatusInvestStockScraping(ScrapingInterface[Stock]):
         config = get_config()
         response = await self._client.get(
             f"{self._url}/acoes",
-            headers=self._headers,
+            headers=get_headers(),
             timeout=config.scraping_timeout_ttl,
         )
         response.raise_for_status()
