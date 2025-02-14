@@ -9,7 +9,7 @@ from typer import Option, Typer
 
 from app.common import aio
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import ReitScrapingOriginEnum
 from app.service import reit as reit_service
 
 app = Typer(name="reit", help="REITs tools.")
@@ -20,15 +20,15 @@ console = Console()
 def get_reit(
     ticker: str,
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        ReitScrapingOriginEnum, Option(help="Data origin.")
+    ] = ReitScrapingOriginEnum.STATUS_INVEST,
 ):
     """
     Get REIT data by ticker.
 
     Args:
         ticker (str): Ticker symbol of the REIT.
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (ReitScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stoke = aio.run(reit_service.get_reit(ticker=ticker.strip(), origin=origin))
     table = Table(box=None)
@@ -48,15 +48,15 @@ def get_reit(
 def list_stokes(
     tickers: list[str],
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        ReitScrapingOriginEnum, Option(help="Data origin.")
+    ] = ReitScrapingOriginEnum.STATUS_INVEST,
 ):
     """
     List REITs.
 
     Args:
         tickers (list[str]): List of ticker symbols of the REITs.
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (ReitScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stokes = aio.run(reit_service.list_reits(tickers=tickers, origin=origin))
     table = Table(box=None)
@@ -83,14 +83,14 @@ def list_stokes(
 @app.command("most_popular", help="List most popular REITs.")
 def get_stokes_most_popular(
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        ReitScrapingOriginEnum, Option(help="Data origin.")
+    ] = ReitScrapingOriginEnum.STATUS_INVEST,
 ):
     """
     List most popular REITs.
 
     Args:
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (ReitScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stokes = aio.run(reit_service.list_reits_most_popular(origin=origin))
     table = Table(box=None)

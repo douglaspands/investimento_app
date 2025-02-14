@@ -5,29 +5,39 @@ from zoneinfo import ZoneInfo
 
 from rich.console import Console
 from rich.table import Table
-from typer import Option, Typer
+from typer import Argument, Option, Typer
 
 from app.common import aio
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import StockScrapingOriginEnum
 from app.service import stock as stock_service
 
 app = Typer(name="stock", help="Stock tools.")
 console = Console()
 
 
+def complete_tickers(incomplete: str):
+    completion = []
+    for ticker, help in aio.run(stock_service.list_tickers()):
+        if ticker.startswith(incomplete):
+            completion.append((ticker, help))
+    return completion
+
+
 @app.command("get", help="Get stock data by ticker.")
 def get_stoke(
-    ticker: str,
+    ticker: Annotated[
+        str, Argument(help="Stock ticker.", autocompletion=complete_tickers)
+    ],
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        StockScrapingOriginEnum, Option(help="Data origin.")
+    ] = StockScrapingOriginEnum.STATUS_INVEST,
 ):
     """Get stock data by ticker.
 
     Args:
         ticker (str): Ticker symbol of the stock.
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (StockScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stoke = aio.run(stock_service.get_stock(ticker=ticker.strip(), origin=origin))
     table = Table(box=None)
@@ -45,17 +55,19 @@ def get_stoke(
 
 @app.command("list", help="List stocks by tickers.")
 def list_stokes(
-    tickers: list[str],
+    tickers: Annotated[
+        list[str], Argument(help="Stock ticker.", autocompletion=complete_tickers)
+    ],
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        StockScrapingOriginEnum, Option(help="Data origin.")
+    ] = StockScrapingOriginEnum.STATUS_INVEST,
 ):
     """
     List stocks.
 
     Args:
         tickers (list[str]): List of ticker symbols of the stocks.
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (StockScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stokes = aio.run(stock_service.list_stocks(tickers=tickers, origin=origin))
     table = Table(box=None)
@@ -82,13 +94,13 @@ def list_stokes(
 @app.command("most_popular", help="List most popular stocks.")
 def get_stokes_most_popular(
     origin: Annotated[
-        ScrapingOriginEnum, Option(help="Data origin.")
-    ] = ScrapingOriginEnum.STATUS_INVEST,
+        StockScrapingOriginEnum, Option(help="Data origin.")
+    ] = StockScrapingOriginEnum.STATUS_INVEST,
 ):
     """
     List most popular stocks.
     Args:
-        origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
+        origin (StockScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
     stokes = aio.run(stock_service.list_stocks_most_popular(origin=origin))
     table = Table(box=None)
@@ -111,3 +123,14 @@ def get_stokes_most_popular(
             ],
         )
     console.print(table)
+
+
+@app.command("add", help="Add stock data.")
+def add_stoke(
+    ticker: Annotated[
+        str, Option(help="Stock ticker.", autocompletion=complete_tickers)
+    ],
+    price: Annotated[float, Option(help="Price of stock.")],
+    count: Annotated[int, Option(help="Count of stocks.")],
+):
+    console.print(f"{ticker=} {price=} {count=}")

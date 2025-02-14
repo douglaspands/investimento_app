@@ -1,6 +1,9 @@
 from enum import StrEnum
 
 
-class ScrapingOriginEnum(StrEnum):
+class StockScrapingOriginEnum(StrEnum):
     STATUS_INVEST = "STATUS_INVEST"
-    # INVESTIDOR_10 = "INVESTIDOR_10"
+
+
+class ReitScrapingOriginEnum(StrEnum):
+    STATUS_INVEST = "STATUS_INVEST"

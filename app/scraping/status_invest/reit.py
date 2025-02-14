@@ -9,7 +9,7 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fi
 from app.common.http import get_headers
 from app.common.utils import now_utc
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import ReitScrapingOriginEnum
 from app.resource.reit import Reit
 from app.scraping.interface import ScrapingInterface
 
@@ -77,7 +77,7 @@ class StatusInvestReitScraping(ScrapingInterface[Reit]):
             price=price,
             segment=segment,
             admin=admin,
-            origin=ScrapingOriginEnum.STATUS_INVEST.value,
+            origin=ReitScrapingOriginEnum.STATUS_INVEST.value,
             updated_at=now_utc(),
         )
 
