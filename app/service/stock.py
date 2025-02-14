@@ -33,14 +33,16 @@ async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
                     stock_scraping = stock_scraping_factory(
                         origin=origin, client=http_client
                     )
-                    stoke_now = await stock_scraping.get_by_ticker(ticker=ticker)
-                    stock.price = stoke_now.price
-                    stock.updated_at = stoke_now.updated_at
-                    await stock_repository.update_by_ticker(
+                    ns = await stock_scraping.get_by_ticker(ticker=ticker)
+                    stock = await stock_repository.update_by_ticker(
                         session=db_session,
-                        ticker=ticker,
-                        price=stoke_now.price,
-                        updated_at=stoke_now.updated_at,
+                        ticker=ns.ticker,
+                        name=ns.name,
+                        price=ns.price,
+                        document=ns.document,
+                        description=ns.description,
+                        origin=ns.origin,
+                        updated_at=ns.updated_at,
                     )
         else:
             async with get_client() as http_client:
@@ -87,7 +89,11 @@ async def list_stocks(tickers: list[str], origin: ScrapingOriginEnum) -> list[St
                         await stock_repository.update_by_ticker(
                             session=db_session,
                             ticker=ns.ticker,
+                            name=ns.name,
                             price=ns.price,
+                            document=ns.document,
+                            description=ns.description,
+                            origin=ns.origin,
                             updated_at=ns.updated_at,
                         )
                     else:
@@ -131,7 +137,11 @@ async def list_stocks_most_popular(origin: ScrapingOriginEnum) -> list[Stock]:
                         await stock_repository.update_by_ticker(
                             session=db_session,
                             ticker=ns.ticker,
+                            name=ns.name,
                             price=ns.price,
+                            document=ns.document,
+                            description=ns.description,
+                            origin=ns.origin,
                             updated_at=ns.updated_at,
                         )
                     else:
