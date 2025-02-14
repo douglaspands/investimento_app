@@ -36,7 +36,7 @@ user_agents = [
 ]
 
 
-def get_httpclient() -> AsyncClient:
+def get_client() -> AsyncClient:
     return AsyncClient()
 
 

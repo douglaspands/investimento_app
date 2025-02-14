@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from app.common.database import db_session_maker
-from app.common.http import get_httpclient
+from app.common.db import session_maker
+from app.common.http import get_client
 from app.config import get_config
 from app.enum.scraping import ScrapingOriginEnum
 from app.model.stock import Stock as StockModel
@@ -9,7 +9,7 @@ from app.repository import stock as stock_repository
 from app.resource.stock import Stock
 from app.scraping.stock import stock_scraping_factory
 
-SessionLocal = db_session_maker()
+SessionLocal = session_maker()
 
 
 async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
@@ -29,7 +29,7 @@ async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
             if stock.updated_at and stock.updated_at < (
                 datetime.now() - timedelta(seconds=config.stock_cache_ttl)
             ):
-                async with get_httpclient() as http_client:
+                async with get_client() as http_client:
                     stock_scraping = stock_scraping_factory(
                         origin=origin, client=http_client
                     )
@@ -43,7 +43,7 @@ async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
                         updated_at=stoke_now.updated_at,
                     )
         else:
-            async with get_httpclient() as http_client:
+            async with get_client() as http_client:
                 stock_scraping = stock_scraping_factory(
                     origin=origin, client=http_client
                 )
@@ -74,7 +74,7 @@ async def list_stocks(tickers: list[str], origin: ScrapingOriginEnum) -> list[St
         )
         diff = set(tickers) - set([s.ticker for s in stocks])
         if diff:
-            async with get_httpclient() as http_client:
+            async with get_client() as http_client:
                 stock_scraping = stock_scraping_factory(
                     origin=origin, client=http_client
                 )
@@ -113,7 +113,7 @@ async def list_stocks_most_popular(origin: ScrapingOriginEnum) -> list[Stock]:
     config = get_config()
     result: list[Stock] = []
     async with SessionLocal() as db_session, db_session.begin():
-        async with get_httpclient() as http_client:
+        async with get_client() as http_client:
             stock_scraping = stock_scraping_factory(origin=origin, client=http_client)
             tickers = await stock_scraping.list_tickers_most_popular()
             updated_at = datetime.now() - timedelta(seconds=config.stock_cache_ttl)

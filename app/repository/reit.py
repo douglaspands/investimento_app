@@ -5,7 +5,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlmodel import or_, select
 
 from app.common import utils
-from app.common.database import AsyncSession
+from app.common.db import AsyncSession
 from app.model.reit import Reit as ReitModel
 
 

@@ -1,4 +1,3 @@
-import asyncio
 from datetime import datetime
 from decimal import Decimal
 from typing import Annotated
@@ -8,6 +7,7 @@ from rich.console import Console
 from rich.table import Table
 from typer import Option, Typer
 
+from app.common import aio
 from app.config import get_config
 from app.enum.scraping import ScrapingOriginEnum
 from app.service import reit as reit_service
@@ -30,7 +30,7 @@ def get_reit(
         ticker (str): Ticker symbol of the REIT.
         origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
-    stoke = asyncio.run(reit_service.get_reit(ticker=ticker.strip(), origin=origin))
+    stoke = aio.run(reit_service.get_reit(ticker=ticker.strip(), origin=origin))
     table = Table(box=None)
     for key in ["field", "value"]:
         table.add_column(key.upper())
@@ -58,7 +58,7 @@ def list_stokes(
         tickers (list[str]): List of ticker symbols of the REITs.
         origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
-    stokes = asyncio.run(reit_service.list_reits(tickers=tickers, origin=origin))
+    stokes = aio.run(reit_service.list_reits(tickers=tickers, origin=origin))
     table = Table(box=None)
     for key in stokes[0].__dict__.keys():
         if key in ("description", "origin"):
@@ -92,7 +92,7 @@ def get_stokes_most_popular(
     Args:
         origin (ScrapingOriginEnum, optional): Data origin. Defaults to "Data origin".
     """
-    stokes = asyncio.run(reit_service.list_reits_most_popular(origin=origin))
+    stokes = aio.run(reit_service.list_reits_most_popular(origin=origin))
     table = Table(box=None)
     for key in ["order"] + list(stokes[0].__dict__.keys()):
         if key in ("description", "origin"):
