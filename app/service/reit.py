@@ -33,21 +33,23 @@ async def get_reit(ticker: str, origin: ScrapingOriginEnum) -> Reit:
                     reit_scraping = reit_scraping_factory(
                         origin=origin, client=http_client
                     )
-                    stoke_now = await reit_scraping.get_by_ticker(ticker=ticker)
-                    reit.price = stoke_now.price
-                    reit.updated_at = stoke_now.updated_at
-                    await reit_repository.update_by_ticker(
+                    nr = await reit_scraping.get_by_ticker(ticker=ticker)
+                    reit = await reit_repository.update_by_ticker(
                         session=db_session,
-                        ticker=ticker,
-                        price=stoke_now.price,
-                        updated_at=stoke_now.updated_at,
+                        ticker=nr.ticker,
+                        name=nr.name,
+                        price=nr.price,
+                        segment=nr.segment,
+                        admin=nr.admin,
+                        origin=nr.origin,
+                        updated_at=nr.updated_at,
                     )
         else:
             async with get_client() as http_client:
                 reit_scraping = reit_scraping_factory(origin=origin, client=http_client)
-                stoke_now = await reit_scraping.get_by_ticker(ticker=ticker)
+                nr = await reit_scraping.get_by_ticker(ticker=ticker)
                 reit = await reit_repository.create(
-                    session=db_session, reit=ReitModel(**stoke_now.__dict__)
+                    session=db_session, reit=ReitModel(**nr.__dict__)
                 )
     return Reit(**reit.__dict__)
 
@@ -86,7 +88,11 @@ async def list_reits(tickers: list[str], origin: ScrapingOriginEnum) -> list[Rei
                             await reit_repository.update_by_ticker(
                                 session=db_session,
                                 ticker=nr.ticker,
+                                name=nr.name,
                                 price=nr.price,
+                                segment=nr.segment,
+                                admin=nr.admin,
+                                origin=nr.origin,
                                 updated_at=nr.updated_at,
                             )
                         else:
@@ -130,7 +136,11 @@ async def list_reits_most_popular(origin: ScrapingOriginEnum) -> list[Reit]:
                         await reit_repository.update_by_ticker(
                             session=db_session,
                             ticker=nr.ticker,
+                            name=nr.name,
                             price=nr.price,
+                            segment=nr.segment,
+                            admin=nr.admin,
+                            origin=nr.origin,
                             updated_at=nr.updated_at,
                         )
                     else:
