@@ -11,3 +11,4 @@ class Reit(BaseModel):
     segment: str
     price: Decimal
     updated_at: datetime
+    origin: str

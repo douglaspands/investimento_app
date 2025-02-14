@@ -1,8 +1,11 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Column, DateTime, Field, SQLModel
+from sqlmodel import Column, Field, SQLModel
+
+from app.common.model import DateTimeWithTimeZone
+from app.common.utils import now_utc
 
 
 class Stock(SQLModel, table=True):
@@ -12,18 +15,19 @@ class Stock(SQLModel, table=True):
     description: str
     document: str
     price: Decimal
+    origin: str
     created_at: datetime = Field(
         sa_column=Column(
-            DateTime,
-            default=lambda: datetime.now(tz=timezone.utc),
+            DateTimeWithTimeZone,
+            default=lambda: now_utc(),
             nullable=False,
         )
     )
     updated_at: datetime = Field(
         sa_column=Column(
-            DateTime,
-            default=lambda: datetime.now(tz=timezone.utc),
-            onupdate=lambda: datetime.now(tz=timezone.utc),
+            DateTimeWithTimeZone,
+            default=lambda: now_utc(),
+            onupdate=lambda: now_utc(),
             nullable=False,
         )
     )

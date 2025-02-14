@@ -7,7 +7,7 @@ from app.config import get_config
 
 
 @cache
-def db_session_maker() -> async_sessionmaker[AsyncSession]:
+def session_maker() -> async_sessionmaker[AsyncSession]:
     config = get_config()
     session_local = async_sessionmaker(
         bind=create_async_engine(
