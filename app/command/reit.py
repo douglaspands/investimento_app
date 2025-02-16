@@ -5,8 +5,9 @@ from zoneinfo import ZoneInfo
 
 from rich.console import Console
 from rich.table import Table
-from typer import Option, Typer
+from typer import Argument, Option, Typer
 
+from app.command.complete.ticker import complete_reit_tickers
 from app.common import aio
 from app.config import get_config
 from app.enum.scraping import ReitScrapingOriginEnum
@@ -18,7 +19,9 @@ console = Console()
 
 @app.command("get", help="Get REIT data by ticker.")
 def get_reit(
-    ticker: str,
+    ticker: Annotated[
+        str, Argument(help="REIT ticker.", autocompletion=complete_reit_tickers)
+    ],
     origin: Annotated[
         ReitScrapingOriginEnum, Option(help="Data origin.")
     ] = ReitScrapingOriginEnum.STATUS_INVEST,
@@ -46,7 +49,9 @@ def get_reit(
 
 @app.command("list", help="List REITs by tickers.")
 def list_stokes(
-    tickers: list[str],
+    tickers: Annotated[
+        list[str], Argument(help="REIT ticker.", autocompletion=complete_reit_tickers)
+    ],
     origin: Annotated[
         ReitScrapingOriginEnum, Option(help="Data origin.")
     ] = ReitScrapingOriginEnum.STATUS_INVEST,

@@ -8,10 +8,7 @@ from app.common.http import get_headers
 from app.config import get_config
 from app.resource.ticker import Ticker, TickerTypeEnum
 
-# from app.scraping.interface import ScrapingInterface
 
-
-# class DadosDeMercadoStockScraping(ScrapingInterface[Stock]):
 class DadosDeMercadoStockScraping:
     """Dados De Mercado Stock Scraping."""
 
