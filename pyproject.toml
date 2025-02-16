@@ -42,6 +42,7 @@ test = "script.poetry:test"
 format = "script.poetry:format"
 check = "script.poetry:check"
 build = "script.poetry:build"
+pycache_remove = "script.poetry:pycache_remove"
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"

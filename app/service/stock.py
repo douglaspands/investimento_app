@@ -4,14 +4,9 @@ from app.common.db import session_maker
 from app.common.http import get_client
 from app.config import get_config
 from app.enum.scraping import StockScrapingOriginEnum
-from app.enum.ticker import TickerTypeEnum
 from app.model.stock import Stock as StockModel
-from app.model.ticker import Ticker as TickerModel
 from app.repository import stock as stock_repository
-from app.repository import ticker as ticker_repository
 from app.resource.stock import Stock
-from app.resource.ticker import Ticker
-from app.scraping.dados_de_mercado.stock import DadosDeMercadoStockScraping
 from app.scraping.stock import stock_scraping_factory
 
 SessionLocal = session_maker()
@@ -159,28 +154,3 @@ async def list_stocks_most_popular(origin: StockScrapingOriginEnum) -> list[Stoc
             else:
                 result = [Stock(**s.__dict__) for s in stocks]
     return result
-
-
-async def list_tickers() -> list[Ticker]:
-    """
-    List all available tickers.
-
-    Returns:
-        list[str]: List of tickers.
-    """
-    async with SessionLocal() as db_session:
-        tickers = await ticker_repository.get_all(
-            session=db_session, type=TickerTypeEnum.STOCK
-        )
-    return [Ticker(**t.__dict__) for t in tickers]
-
-
-async def save_all_tickers():
-    async with get_client() as http_client:
-        stock_scraping = DadosDeMercadoStockScraping(client=http_client)
-        tickers = await stock_scraping.list_tickers()
-        await ticker_repository.truncate()
-        async with SessionLocal() as db_session, db_session.begin():
-            await ticker_repository.create_all(
-                session=db_session, tickers=[TickerModel(**t.__dict__) for t in tickers]
-            )

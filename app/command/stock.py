@@ -7,6 +7,7 @@ from rich.console import Console
 from rich.table import Table
 from typer import Argument, Option, Typer
 
+from app.command.complete.ticker import complete_stock_tickers
 from app.common import aio
 from app.config import get_config
 from app.enum.scraping import StockScrapingOriginEnum
@@ -16,18 +17,10 @@ app = Typer(name="stock", help="Stock tools.")
 console = Console()
 
 
-def complete_tickers(incomplete: str):
-    completion = []
-    for ticker, help in aio.run(stock_service.list_tickers()):
-        if ticker.startswith(incomplete):
-            completion.append((ticker, help))
-    return completion
-
-
 @app.command("get", help="Get stock data by ticker.")
 def get_stoke(
     ticker: Annotated[
-        str, Argument(help="Stock ticker.", autocompletion=complete_tickers)
+        str, Argument(help="Stock ticker.", autocompletion=complete_stock_tickers)
     ],
     origin: Annotated[
         StockScrapingOriginEnum, Option(help="Data origin.")
@@ -56,7 +49,7 @@ def get_stoke(
 @app.command("list", help="List stocks by tickers.")
 def list_stokes(
     tickers: Annotated[
-        list[str], Argument(help="Stock ticker.", autocompletion=complete_tickers)
+        list[str], Argument(help="Stock ticker.", autocompletion=complete_stock_tickers)
     ],
     origin: Annotated[
         StockScrapingOriginEnum, Option(help="Data origin.")
@@ -128,7 +121,7 @@ def get_stokes_most_popular(
 @app.command("add", help="Add stock data.")
 def add_stoke(
     ticker: Annotated[
-        str, Option(help="Stock ticker.", autocompletion=complete_tickers)
+        str, Option(help="Stock ticker.", autocompletion=complete_stock_tickers)
     ],
     price: Annotated[float, Option(help="Price of stock.")],
     count: Annotated[int, Option(help="Count of stocks.")],

@@ -40,10 +40,17 @@ class DadosDeMercadoStockScraping:
         selector = Selector(text=response.text)
         tickers = []
         helpers = []
+        ignored = {}
         for row in selector.xpath('//*[@id="stocks"]/tbody/tr'):
-            for column in row.xpath("//td[1]//text()"):
-                tickers.append(str(column).strip())
-            for column in row.xpath("//td[2]//text()"):
+            for idx, column in enumerate(row.xpath("//td[1]//text()")):
+                ticker = str(column).strip()
+                if ticker in tickers:
+                    ignored[idx] = True
+                    continue
+                tickers.append(ticker)
+            for idx, column in enumerate(row.xpath("//td[2]//text()")):
+                if ignored.get(idx):
+                    continue
                 helpers.append(str(column).strip())
             break
         return [

@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlmodel import Column, Field, SQLModel
 
-from app.common.model import DateTimeWithTimeZone
+from app.common.model.type import DateTimeWithTimeZone
 from app.common.utils import now_utc
 from app.enum.ticker import TickerTypeEnum
 
