@@ -9,7 +9,7 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fi
 from app.common.http import get_headers
 from app.common.utils import now_utc
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import StockScrapingOriginEnum
 from app.resource.stock import Stock
 from app.scraping.interface import ScrapingInterface
 
@@ -72,7 +72,7 @@ class StatusInvestStockScraping(ScrapingInterface[Stock]):
             price=price,
             document=document,
             description=description,
-            origin=ScrapingOriginEnum.STATUS_INVEST.value,
+            origin=StockScrapingOriginEnum.STATUS_INVEST.value,
             updated_at=now_utc(),
         )
 

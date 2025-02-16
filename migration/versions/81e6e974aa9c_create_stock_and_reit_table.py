@@ -12,6 +12,8 @@ import sqlalchemy as sa
 import sqlmodel
 from alembic import op
 
+import app
+
 # revision identifiers, used by Alembic.
 revision: str = "81e6e974aa9c"
 down_revision: Union[str, None] = None
@@ -29,8 +31,12 @@ def upgrade() -> None:
         sa.Column("admin", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("segment", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("price", sa.Numeric(), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column(
+            "created_at", app.common.model.type.DateTimeWithTimeZone(), nullable=False
+        ),
+        sa.Column(
+            "updated_at", app.common.model.type.DateTimeWithTimeZone(), nullable=False
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_reit_ticker"), "reit", ["ticker"], unique=True)
@@ -42,8 +48,12 @@ def upgrade() -> None:
         sa.Column("description", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("document", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("price", sa.Numeric(), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column(
+            "created_at", app.common.model.type.DateTimeWithTimeZone(), nullable=False
+        ),
+        sa.Column(
+            "updated_at", app.common.model.type.DateTimeWithTimeZone(), nullable=False
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_stock_ticker"), "stock", ["ticker"], unique=True)

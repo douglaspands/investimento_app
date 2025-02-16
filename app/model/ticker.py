@@ -1,21 +1,18 @@
 from datetime import datetime
-from decimal import Decimal
 from typing import Optional
 
 from sqlmodel import Column, Field, SQLModel
 
 from app.common.model.type import DateTimeWithTimeZone
 from app.common.utils import now_utc
+from app.enum.ticker import TickerTypeEnum
 
 
-class Stock(SQLModel, table=True):
+class Ticker(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    ticker: str = Field(index=True, unique=True)
-    name: str
-    description: str
-    document: str
-    price: Decimal
-    origin: str
+    symbol: str = Field(index=True, unique=True)
+    help: str
+    type: TickerTypeEnum = Field(index=True)
     created_at: datetime = Field(
         sa_column=Column(
             DateTimeWithTimeZone,

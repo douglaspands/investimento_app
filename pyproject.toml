@@ -1,6 +1,6 @@
 [project]
 name = "investment-app"
-version = "0.8.1"
+version = "0.9.0"
 description = "Investment support application"
 authors = [
     {name = "Douglas Panhota",email = "douglaspands@gmail.com"}
@@ -42,6 +42,7 @@ test = "script.poetry:test"
 format = "script.poetry:format"
 check = "script.poetry:check"
 build = "script.poetry:build"
+pycache_remove = "script.poetry:pycache_remove"
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"

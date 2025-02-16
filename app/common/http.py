@@ -52,4 +52,5 @@ def get_headers() -> dict[str, str]:
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
         "Accept-Encoding": "gzip, deflate",
         "Cache-Control": "no-cache",
+        "Referer": "https://www.google.com/",
     }

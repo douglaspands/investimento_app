@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from app.common.db import session_maker
 from app.common.http import get_client
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import StockScrapingOriginEnum
 from app.model.stock import Stock as StockModel
 from app.repository import stock as stock_repository
 from app.resource.stock import Stock
@@ -12,12 +12,12 @@ from app.scraping.stock import stock_scraping_factory
 SessionLocal = session_maker()
 
 
-async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
+async def get_stock(ticker: str, origin: StockScrapingOriginEnum) -> Stock:
     """Get stock information.
 
     Args:
         ticker (str): Stock ticker.
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (StockScrapingOriginEnum): Scraping origin.
 
     Returns:
         Stock: Stock information.
@@ -56,13 +56,15 @@ async def get_stock(ticker: str, origin: ScrapingOriginEnum) -> Stock:
     return Stock(**stock.__dict__)
 
 
-async def list_stocks(tickers: list[str], origin: ScrapingOriginEnum) -> list[Stock]:
+async def list_stocks(
+    tickers: list[str], origin: StockScrapingOriginEnum
+) -> list[Stock]:
     """
     List stocks information.
 
     Args:
         tickers (list[str]): List of stock tickers.
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (StockScrapingOriginEnum): Scraping origin.
 
     Returns:
         list[Stock]: List of Stock datas.
@@ -106,12 +108,12 @@ async def list_stocks(tickers: list[str], origin: ScrapingOriginEnum) -> list[St
     return result
 
 
-async def list_stocks_most_popular(origin: ScrapingOriginEnum) -> list[Stock]:
+async def list_stocks_most_popular(origin: StockScrapingOriginEnum) -> list[Stock]:
     """
     Get most popular stocks information.
 
     Args:
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (StockScrapingOriginEnum): Scraping origin.
 
     Returns:
         list[Stock]: List of Stock datas.

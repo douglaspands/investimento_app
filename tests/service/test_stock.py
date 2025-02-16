@@ -2,7 +2,7 @@ import pytest
 
 from app.enum.scraping import ScrapingOriginEnum
 from app.resource.stock import Stock
-from app.service import stock as stock_service
+from app.service import ticker as stock_service
 
 
 @pytest.mark.asyncio

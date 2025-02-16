@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from app.common.db import session_maker
 from app.common.http import get_client
 from app.config import get_config
-from app.enum.scraping import ScrapingOriginEnum
+from app.enum.scraping import ReitScrapingOriginEnum
 from app.model.reit import Reit as ReitModel
 from app.repository import reit as reit_repository
 from app.resource.reit import Reit
@@ -12,12 +12,12 @@ from app.scraping.reit import reit_scraping_factory
 SessionLocal = session_maker()
 
 
-async def get_reit(ticker: str, origin: ScrapingOriginEnum) -> Reit:
+async def get_reit(ticker: str, origin: ReitScrapingOriginEnum) -> Reit:
     """Get reit information.
 
     Args:
         ticker (str): Reit ticker.
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (ReitScrapingOriginEnum): Scraping origin.
 
     Returns:
         Reit: Reit information.
@@ -54,13 +54,13 @@ async def get_reit(ticker: str, origin: ScrapingOriginEnum) -> Reit:
     return Reit(**reit.__dict__)
 
 
-async def list_reits(tickers: list[str], origin: ScrapingOriginEnum) -> list[Reit]:
+async def list_reits(tickers: list[str], origin: ReitScrapingOriginEnum) -> list[Reit]:
     """
     List reits information.
 
     Args:
         tickers (list[str]): List of reit tickers.
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (ReitScrapingOriginEnum): Scraping origin.
 
     Returns:
         list[Reit]: List of Reit datas.
@@ -105,12 +105,12 @@ async def list_reits(tickers: list[str], origin: ScrapingOriginEnum) -> list[Rei
     return result
 
 
-async def list_reits_most_popular(origin: ScrapingOriginEnum) -> list[Reit]:
+async def list_reits_most_popular(origin: ReitScrapingOriginEnum) -> list[Reit]:
     """
     Get most popular reits information.
 
     Args:
-        origin (ScrapingOriginEnum): Scraping origin.
+        origin (ReitScrapingOriginEnum): Scraping origin.
 
     Returns:
         list[Reit]: List of Reit datas.

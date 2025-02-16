@@ -85,7 +85,7 @@ python main.py reit get MXRF11
  UPDATED_AT  2025-02-05T00:19:59.495299
 ```
 
-5. Execute a aplicação para listar o preços dos Fiis:
+5. Execute a aplicação para listar o preços dos FIIs:
 
 ```sh
 python main.py reit list MXRF11 XPML11 GARE11 HGLG11 VGHF11
@@ -114,6 +114,15 @@ python main.py reit most_popular
                 FII                                     DTVM                                                                                                      
  5      HGLG11  CGHG Logística                          PLURAL S.A. BANCO MÚLTIPLO              Logística                      149.79  2025-02-05T00:20:52.971735 
  6      VGHF11  VALORA HEDGE FUND                       BANCO DAYCOVAL S.A.                     Títulos e Valores Mobiliários  6.81    2025-02-05T00:20:52.911971
+```
+
+7. Criar o cache do autocomplete ao apertar a tecla Tab:
+
+```sh
+python main.py utils auto_complete
+
+# Output:
+Tickers downloaded successfully!
 ```
 
 > `python main.py --help` para ver os argumentos disponíveis.

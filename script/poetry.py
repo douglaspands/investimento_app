@@ -2,6 +2,7 @@ import platform
 import subprocess
 
 folder_sep = "/" if platform.system() in ("Linux",) else "\\"
+os_name = platform.system()
 
 
 def shell(command: str | list[str]):
@@ -34,6 +35,8 @@ def build():
                 "trader",
                 "--hiddenimport",
                 "aiosqlite",
+                "--hiddenimport",
+                "shellingham.posix",
                 "--runtime-hook",
                 "./script/hook.py",
                 "--add-data",
@@ -48,3 +51,8 @@ def build():
             ]
         )
     )
+
+
+def pycache_remove():
+    for folder in ["app", "tests", "migration"]:
+        shell(f"cd {folder} && find . -type d -name '__pycache__' | xargs rm -rf")
