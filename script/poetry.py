@@ -2,6 +2,7 @@ import subprocess
 
 
 def shell(command: str | list[str]):
+    print(f"$ {command if isinstance(command, str) else ' '.join(command)}")
     return subprocess.run(command, check=True, shell=True)
 
 
@@ -21,6 +22,7 @@ def check():
 
 
 def build():
+    hidden_import = ["aiosqlite", "shellingham.posix", "logging.config", "tzdata"]
     shell(
         " ".join(
             [
@@ -29,12 +31,9 @@ def build():
                 '"PYTHONDONTWRITEBYTECODE=1"',
                 "--name",
                 "trader",
-                "--hiddenimport",
-                "aiosqlite",
-                "--hiddenimport",
-                "shellingham.posix",
-                "--hiddenimport",
-                "logging.config",
+                *(" ".join([f"--hiddenimport {hi}" for hi in hidden_import])).split(
+                    " "
+                ),
                 "--runtime-hook",
                 "./script/hook.py",
                 "--add-data",
