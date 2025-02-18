@@ -4,6 +4,7 @@
         "kevinrose.vsc-python-indent",
         "ms-python.mypy-type-checker",
         "tamasfe.even-better-toml",
-        "charliermarsh.ruff"
+        "charliermarsh.ruff",
+        "github.vscode-github-actions"
     ]
 }

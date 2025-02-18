@@ -1,6 +1,6 @@
 [project]
 name = "investment-app"
-version = "0.9.1"
+version = "0.9.2"
 description = "Investment support application"
 authors = [
     {name = "Douglas Panhota",email = "douglaspands@gmail.com"}
@@ -16,7 +16,8 @@ dependencies = [
     "tenacity (>=9.0.0,<10.0.0)",
     "sqlmodel (>=0.0.22,<0.0.23)",
     "aiosqlite (>=0.21.0,<0.22.0)",
-    "alembic (>=1.14.1,<2.0.0)"
+    "alembic (>=1.14.1,<2.0.0)",
+    "tzdata (>=2025.1,<2026.0)"
 ]
 
 [build-system]
