@@ -1,8 +1,4 @@
-import platform
 import subprocess
-
-folder_sep = "/" if platform.system() in ("Linux",) else "\\"
-os_name = platform.system()
 
 
 def shell(command: str | list[str]):
@@ -37,6 +33,8 @@ def build():
                 "aiosqlite",
                 "--hiddenimport",
                 "shellingham.posix",
+                "--hiddenimport",
+                "logging.config",
                 "--runtime-hook",
                 "./script/hook.py",
                 "--add-data",
