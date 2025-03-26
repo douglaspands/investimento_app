@@ -37,10 +37,6 @@ class Config(BaseSettings):
 @cache
 def get_config():
     root_path = Path(__file__).parent.parent
-    alembic_ini = root_path / "alembic.ini"
-    alembic_migration_folder = root_path / "migration"
-    db_url = "sqlite+aiosqlite:///db.sqlite3"
-
     with root_path.joinpath("pyproject.toml").open("rb") as f:
         config = tomllib.load(f)
 
@@ -50,6 +46,10 @@ def get_config():
 
     else:
         config_path = root_path
+
+    alembic_ini = root_path / "alembic.ini"
+    alembic_migration_folder = root_path / "migration"
+    db_url = f"sqlite+aiosqlite:///{config_path / 'db.sqlite3'!s}"
 
     return Config(
         name=config["project"]["name"],

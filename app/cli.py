@@ -14,9 +14,9 @@ def create_app():
     app = Typer(
         name="investiments",
         help=f"{config.description}. < v{config.version} >",
-        # add_completion=False,
         rich_markup_mode="rich",
         context_settings={"help_option_names": ["-h", "--help"]},
+        add_completion=False,
     )
     command_init_app(app)
     app.add_typer(stock_app, rich_help_panel="Investiments")
