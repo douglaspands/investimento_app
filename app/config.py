@@ -1,8 +1,8 @@
 import os
-import tomllib
 from functools import cache
 from pathlib import Path
 
+import tomllib
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

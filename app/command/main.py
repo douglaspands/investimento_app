@@ -7,7 +7,7 @@ from app.config import get_config
 
 def _get_version(option_enabled: bool):
     if option_enabled:
-        console = Console()
+        console = Console(no_color=True)
         console.print(f"v{get_config().version}")
         raise typer.Exit()
 
