@@ -1,5 +1,13 @@
-# App para controle de investimentos
-Aplicação para controle de investimentos.
+# InvestimentoPy [trader.exe]
+
+É uma ferramenta projetada para auxiliar investidores de todos os níveis a tomar decisões informadas e otimizar seus portfólios. Com uma interface intuitiva e acesso a dados em tempo real, você terá as informações necessárias para acompanhar o mercado e analisar oportunidades com confiança.
+
+**Funcionalidades Principais:**
+
+*   **Preços de Cotas:** Acompanhe os preços de cotas de ações de diversas empresas, obtendo informações em tempo real.
+*   **Preços de FIIs (Fundos de Investimento Imobiliário):** Monitore os preços dos FIIs mais populares, permitindo que você invista em imóveis de forma diversificada.
+*   **Mais Populares:** Tenha acesso aos tickers e FIIs mais negociados, indicando tendências do mercado.
+*   **Balanceamento de Portfólio:** Dado o valor que deseja investir, e quais tickers você deseja comprar, ele calcula a quantidade de cada ativo que deve comprar.
 
 ## Requisitos
 
@@ -9,10 +17,10 @@ Aplicação para controle de investimentos.
 
 1. Clone o repositório: `git clone https://github.com/douglaspands/investimento_app.git`
 2. Acesse a pasta do projeto: `cd investimento_app`
-3. Crie um ambiente virtual (opcional): `python -m venv .venv`
+3. Crie um ambiente virtual: `python -m venv .venv`
 4. Ative o ambiente virtual:
    - No Windows: `.venv\Scripts\activate`
-   - No macOS/Linux: `source .venv/bin/activate`
+   - No MacOS/Linux: `source .venv/bin/activate`
 5. Instale o Poetry: `pip install poetry`
 6. Instale as dependências: `poetry install`
 
