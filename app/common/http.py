@@ -37,7 +37,7 @@ user_agents = [
 
 
 def get_client() -> AsyncClient:
-    return AsyncClient()
+    return AsyncClient(verify=False)
 
 
 def get_user_agent() -> str:
