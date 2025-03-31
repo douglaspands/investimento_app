@@ -3,7 +3,7 @@ import subprocess
 
 def shell(command: str | list[str]):
     print(f"$ {command if isinstance(command, str) else ' '.join(command)}")
-    return subprocess.run(command, check=True, shell=True)
+    return subprocess.run(command, shell=True)
 
 
 def test():

@@ -125,6 +125,45 @@ python main.py utils auto_complete
 Tickers downloaded successfully!
 ```
 
+8. Execute a aplicação para balancear o portfólio entre as ações:
+
+```sh
+python main.py balance stock --amount 1000 ITSA4 CXSE3 KLBN4 SAPR4 TAEE4 BBSE3
+
+# Output:
+ TICKET  PRICE  COUNT   TOTAL  UPDATED_AT          
+ BBSE3   40.26      4  161.04  2025-03-30T23:41:00 
+ CXSE3   15.20     11  167.20  2025-03-30T23:41:00 
+ ITSA4    9.62     18  173.16  2025-03-31T00:27:55 
+ KLBN4    3.80     44  167.20  2025-03-31T00:27:55 
+ SAPR4    5.48     31  169.88  2025-03-31T00:27:55 
+ TAEE4   11.37     14  159.18  2025-03-31T00:27:55 
+
+ TOTAL              VALUE 
+ SHARE QUANTITY       122 
+ SPENT AMOUNT      997.66 
+ REMAINING AMOUNT    2.34 
+```
+
+9. Execute a aplicação para balancear o portfólio entre os FIIs:
+
+```sh
+python main.py balance reit --amount 1000 GARE11 CPTS11 VGIR11 SPXS11 CCME11 
+
+# Output:
+ TICKET  PRICE  COUNT   TOTAL  UPDATED_AT          
+ CCME11   8.78     23  201.94  2025-03-31T00:52:17 
+ CPTS11   7.20     28  201.60  2025-03-31T00:52:17 
+ GARE11   8.60     24  206.40  2025-03-30T23:40:56 
+ SPXS11   8.44     23  194.12  2025-03-31T00:52:17 
+ VGIR11   9.58     20  191.60  2025-03-31T00:52:17 
+
+ TOTAL              VALUE 
+ SHARE QUANTITY       118 
+ SPENT AMOUNT      995.66 
+ REMAINING AMOUNT    4.34 
+```
+
 > `python main.py --help` para ver os argumentos disponíveis.
 
 ## Contribuição

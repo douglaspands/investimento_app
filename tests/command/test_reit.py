@@ -18,7 +18,7 @@ def test_list_reits():
     assert "HTMX11" in result.stdout
     assert "Hotel" in result.stdout
     assert "PORD11" in result.stdout
-    assert "Polo" in result.stdout
+    assert "POLO" in result.stdout
 
 
 def test_list_reits_most_popular():
