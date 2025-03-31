@@ -9,6 +9,25 @@
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
+        },
+        {
+            "name": "Test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "balance",
+                "stock",
+                "--amount",
+                "2000",
+                "ITSA4",
+                "CXSE3",
+                "KLBN4",
+                "SAPR4",
+                "TAEE4",
+                "BBSE3"
+            ]
         }
     ]
 }

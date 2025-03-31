@@ -39,7 +39,7 @@ def get_stoke(
     for key, value in stoke.__dict__.items():
         table.add_row(
             key.upper(),
-            value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
+            value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()[:19]
             if isinstance(value, datetime)
             else (f"{value:.2f}" if isinstance(value, Decimal) else str(value)),
         )
@@ -74,7 +74,7 @@ def list_stokes(
     for item in stokes:
         table.add_row(
             *[
-                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
+                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()[:19]
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
@@ -108,7 +108,7 @@ def get_stokes_most_popular(
         table.add_row(
             f"{n + 1}",
             *[
-                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()
+                value.astimezone(ZoneInfo(get_config().timezone_local)).isoformat()[:19]
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
