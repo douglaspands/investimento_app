@@ -1,7 +1,7 @@
 [project]
-name = "investment-app"
-version = "0.11.0"
-description = "Investment support application"
+name = "investment-py"
+version = "0.11.1"
+description = "Investor Support Tool"
 authors = [
     {name = "Douglas Panhota",email = "douglaspands@gmail.com"}
 ]
