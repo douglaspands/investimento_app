@@ -61,8 +61,10 @@ async def _purchase_balancing(
     stock_value = amount_invested / stock_count
     purchased_stocks: list[StockBalance] = []
     remaining_balance = amount_invested
+    price_min = Decimal("Infinity")
 
     for stock in stocks:
+        price_min = stock.price if stock.price < price_min else price_min
         count = int(stock_value / stock.price)
         purchase_balance = StockBalance(
             unit=stock,
@@ -71,8 +73,8 @@ async def _purchase_balancing(
         purchased_stocks.append(purchase_balance)
         remaining_balance -= purchase_balance.total_amount
 
-    for i in range(stock_count):
-        if remaining_balance > 0:
+    while remaining_balance >= price_min:
+        for i in range(stock_count):
             if remaining_balance >= purchased_stocks[i].unit.price:
                 purchased_stocks[i].count += 1
                 remaining_balance -= purchased_stocks[i].unit.price
