@@ -24,7 +24,17 @@ async def stock_purchase_balancing(
     stocks = await stock_service.list_stocks(
         tickers=tickers, origin=StockScrapingOriginEnum.STATUS_INVEST
     )
-    return await _purchase_balancing(amount_invested=amount_invested, stocks=stocks)
+    stocks_order: dict[str, Stock] = {}
+    tickers_ = tickers.copy()
+    tickers_.reverse()
+    while tickers_:
+        for stock in stocks:
+            if tickers_ and stock.ticker == tickers_[-1]:
+                stocks_order[tickers_[-1]] = stock
+                tickers_.pop()
+    return await _purchase_balancing(
+        amount_invested=amount_invested, stocks=list(stocks_order.values())
+    )
 
 
 async def reit_purchase_balancing(
@@ -39,10 +49,20 @@ async def reit_purchase_balancing(
     Returns:
         PurchaseBalance: Purchase balance.
     """
-    stocks = await reit_service.list_reits(
+    reits = await reit_service.list_reits(
         tickers=tickers, origin=ReitScrapingOriginEnum.STATUS_INVEST
     )
-    return await _purchase_balancing(amount_invested=amount_invested, stocks=stocks)
+    reits_order: dict[str, Reit] = {}
+    tickers_ = tickers.copy()
+    tickers_.reverse()
+    while tickers_:
+        for reit in reits:
+            if tickers_ and reit.ticker == tickers_[-1]:
+                reits_order[tickers_[-1]] = reit
+                tickers_.pop()
+    return await _purchase_balancing(
+        amount_invested=amount_invested, stocks=list(reits_order.values())
+    )
 
 
 async def _purchase_balancing(
