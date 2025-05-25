@@ -50,14 +50,17 @@ class StatusInvestStockScraping(ScrapingInterface[Stock]):
         )
         response.raise_for_status()
         selector = Selector(text=response.text)
+        name = "N/A"
         for result in selector.xpath("//h1[@title]"):
             name = result.attrib["title"].split("-").pop().strip()
             break
+        price = Decimal("0")
         for result in selector.xpath(
             '//div[@title="Valor atual do ativo"]/strong/text()'
         ):
             price = Decimal(str(result).strip().replace(",", "."))
             break
+        document = "N/A"
         for result in selector.xpath(
             "//*[@id='company-section']/div[1]/div/div[1]/div[2]/h4/small/text()"
         ):

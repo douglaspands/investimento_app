@@ -53,19 +53,23 @@ class StatusInvestReitScraping(ScrapingInterface[Reit]):
         )
         response.raise_for_status()
         selector = Selector(text=response.text)
+        name = "N/A"
         for result in selector.xpath("//h1[@class='lh-4']/small/text()"):
             name = str(result).strip()
             break
+        segment = "N/A"
         for result in selector.xpath(
             "//*[@id='fund-section']/div/div/div[2]/div/div[6]/div/div/strong/text()"
         ):
             segment = str(result).strip()
             break
+        price = Decimal("0")
         for result in selector.xpath(
             '//div[@title="Valor atual do ativo"]/strong/text()'
         ):
             price = Decimal(str(result).strip().replace(",", "."))
             break
+        admin = "N/A"
         for result in selector.xpath(
             "//*[@id='fund-section']/div/div/div[3]/div/div[2]/div[1]/div/strong/text()"
         ):
