@@ -65,8 +65,9 @@ def list_stokes(
     """
     stokes = aio.run(reit_service.list_reits(tickers=tickers, origin=origin))
     table = Table(box=None)
+    keys_not_included = ("description", "origin")
     for key in stokes[0].__dict__.keys():
-        if key in ("description", "origin"):
+        if key in keys_not_included:
             continue
         if key in ("price",):
             table.add_column(key.upper(), justify="right")
@@ -79,7 +80,7 @@ def list_stokes(
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
-                if key not in ("description", "origin")
+                if key not in keys_not_included
             ]
         )
     console.print(table)
@@ -99,8 +100,9 @@ def get_stokes_most_popular(
     """
     stokes = aio.run(reit_service.list_reits_most_popular(origin=origin))
     table = Table(box=None)
+    keys_not_included = ("description", "origin")
     for key in ["order"] + list(stokes[0].__dict__.keys()):
-        if key in ("description", "origin"):
+        if key in keys_not_included:
             continue
         if key in ("order", "price"):
             table.add_column(key.upper(), justify="right")
@@ -115,7 +117,7 @@ def get_stokes_most_popular(
                 if isinstance(value, datetime)
                 else (f"{value:.2f}" if isinstance(value, Decimal) else str(value))
                 for key, value in item.__dict__.items()
-                if key not in ("description", "origin")
+                if key not in keys_not_included
             ],
         )
     console.print(table)

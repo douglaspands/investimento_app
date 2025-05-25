@@ -57,6 +57,12 @@ class StatusInvestReitScraping(ScrapingInterface[Reit]):
         for result in selector.xpath("//h1[@class='lh-4']/small/text()"):
             name = str(result).strip()
             break
+        document = "N/A"
+        for result in selector.xpath(
+            "//*[@id='fund-section']/div/div/div[2]/div/div[1]/div/div/strong/text()"
+        ):
+            document = str(result).strip()
+            break
         segment = "N/A"
         for result in selector.xpath(
             "//*[@id='fund-section']/div/div/div[2]/div/div[6]/div/div/strong/text()"
@@ -77,6 +83,7 @@ class StatusInvestReitScraping(ScrapingInterface[Reit]):
             break
         return Reit(
             name=name,
+            document=document,
             ticker=ticker.upper(),
             price=price,
             segment=segment,
